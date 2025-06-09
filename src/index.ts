@@ -76,12 +76,14 @@ async function main() {
         events: [...acc.events, ...element!.events],
         pullRequestInfo: [...acc?.pullRequestInfo, ...element!.pullRequestInfo],
         comments: [...acc?.comments, ...element!.comments],
+        files: [...(acc?.files || []), ...(element!.files || [])],
       }),
       {
         ownerRepo: "",
         events: [],
         pullRequestInfo: [],
         comments: [],
+        files: [],
       }
     );
     const preparedData = collectData(mergedData, teams);

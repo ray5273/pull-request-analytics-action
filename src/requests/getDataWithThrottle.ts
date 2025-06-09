@@ -4,6 +4,7 @@ import { delay } from "./delay";
 import { getIssueTimelineEvents } from "./getIssueTimelineEvents";
 import { getPullRequestComments } from "./getPullRequestComments";
 import { getPullRequestDatas } from "./getPullRequestData";
+import { getPullRequestFiles } from "./getPullRequestFiles";
 import { Options, Repository } from "./types";
 
 export const getDataWithThrottle = async (
@@ -14,6 +15,7 @@ export const getDataWithThrottle = async (
   const PRs = [];
   const PREvents = [];
   const PRComments = [];
+  const PRFiles = [];
   let counter = 0;
   const { skipComments = true } = options;
   while (pullRequestNumbers.length > PRs.length) {
@@ -27,12 +29,19 @@ export const getDataWithThrottle = async (
       pullRequestNumbersChunks,
       repository
     );
+    const pullRequestFiles = await getPullRequestFiles(
+      pullRequestNumbersChunks,
+      repository
+    );
     console.log(
       `Batch request #${counter + 1} out of ${Math.ceil(
         pullRequestNumbers.length / concurrentLimit
       )}(${repository.owner}/${repository.repo})`
     );
     const prs = await Promise.allSettled(pullRequestDatas);
+    await delay(5000);
+
+    const files = await Promise.allSettled(pullRequestFiles);
     await delay(5000);
 
     const pullRequestEvents = await getIssueTimelineEvents(
@@ -56,6 +65,7 @@ export const getDataWithThrottle = async (
     PRs.push(...prs);
     PRComments.push(...comments);
     PREvents.push(...events);
+    PRFiles.push(...files);
   }
-  return { PRs, PREvents, PRComments };
+  return { PRs, PREvents, PRComments, PRFiles };
 };

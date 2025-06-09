@@ -38,3 +38,5 @@ export const periodSplitUnit = {
   months: "months",
   none: "none",
 };
+
+export const markdownKeywords = ["adr", "design"];
