@@ -1,0 +1,24 @@
+name: "PR workflow test"
+on:
+  pull_request:
+
+jobs:
+  build-and-execute:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 20
+      - name: Install dependencies
+        run: npm install
+      - name: Build action
+        run: npm run build
+      - name: Run action
+        uses: ./
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_OWNERS_REPOS: ${{ github.repository }}
+          EXECUTION_OUTCOME: markdown
+          ALLOW_ANALYTICS: false
+          REPORT_PERIOD: days:1
