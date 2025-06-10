@@ -241,7 +241,7 @@ To integrate **pull-request-analytics-action** into your GitHub repository, use 
 
 1. Navigate to the `.github/workflows` directory in your repository.
 2. Create a YAML file, for example, `pull-request-analytics.yml`.
-3. Open your new YAML file and paste the following example workflow. This is a starting template and you can modify it as needed:
+3. Open your new YAML file and paste the following example workflow. This is a starting template and you can modify it as needed. Make sure your workflow installs Node.js 20 to avoid runtime errors:
 
    ```yaml
    name: "PR Analytics"
@@ -253,14 +253,18 @@ To integrate **pull-request-analytics-action** into your GitHub repository, use 
          report_date_end:
            description: "Report date end(d/MM/yyyy)"
    jobs:
-     create-report:
-       name: "Create report"
-       runs-on: ubuntu-latest
-       steps:
-         - name: "Run script for analytics"
-           uses: AlexSim93/pull-request-analytics-action@v4
-           with:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # In the case of a personal access token, it needs to be added to the repository's secrets and used in this field.
+    create-report:
+      name: "Create report"
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v4
+          with:
+            node-version: "20"
+        - name: "Run script for analytics"
+          uses: AlexSim93/pull-request-analytics-action@v4
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # In the case of a personal access token, it needs to be added to the repository's secrets and used in this field.
              GITHUB_REPO_FOR_ISSUE: # Make sure to specify the name of the repository where the issue will be created
              GITHUB_OWNER_FOR_ISSUE: # Make sure to specify the owner of the repository where the issue will be created
              GITHUB_OWNERS_REPOS: # Be sure to list the owner and repository name in the format owner/repo
