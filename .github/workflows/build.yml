@@ -14,3 +14,5 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: Check compiled output
+        run: git diff --exit-code build/index.js
