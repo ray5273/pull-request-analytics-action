@@ -117,7 +117,8 @@ inputs:
   SHOW_CORRELATION_GRAPHS:
     description: "Shows correlation graphs"
     required: false
-    default: false  SHOW_ACTIVITY_TIME_GRAPHS:
+    default: false
+  SHOW_ACTIVITY_TIME_GRAPHS:
     description: "Shows activity time graphs"
     required: false
     default: false
