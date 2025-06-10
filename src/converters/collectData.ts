@@ -73,6 +73,7 @@ export const collectData = (
           [key, innerKey],
           preparePullRequestInfo(
             pullRequest,
+            data.files[index] || [],
             get(collection, [key, innerKey], {})
           )
         );

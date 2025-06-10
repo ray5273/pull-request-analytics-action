@@ -96,6 +96,10 @@ inputs:
   EXCLUDE_LABELS:
     description: "Excludes PRs with mentioned labels. Values should be separated by comma"
     required: false
+  MARKDOWN_KEYWORDS:
+    description: "Keywords to check in markdown filenames separated by comma"
+    required: false
+    default: "adr, design"
   TIMEZONE:
     description: "Timezone to use in action"
     required: false

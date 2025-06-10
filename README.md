@@ -12,6 +12,7 @@ This GitHub Action measures metrics for developers and/or teams. Reports are gen
 - [Outputs](#outputs)
 - [Recommendations and Tips](#recommendations-and-tips)
 - [Troubleshooting](#troubleshooting)
+- [Local Testing](#local-testing)
 - [Privacy and Data Handling](#privacy-and-data-handling)
 - [Usage Limitations](#usage-limitations)
 - [How You Can Help](#how-you-can-help)
@@ -240,7 +241,7 @@ To integrate **pull-request-analytics-action** into your GitHub repository, use 
 
 1. Navigate to the `.github/workflows` directory in your repository.
 2. Create a YAML file, for example, `pull-request-analytics.yml`.
-3. Open your new YAML file and paste the following example workflow. This is a starting template and you can modify it as needed:
+3. Open your new YAML file and paste the following example workflow. This is a starting template and you can modify it as needed. Make sure your workflow installs Node.js 20 to avoid runtime errors:
 
    ```yaml
    name: "PR Analytics"
@@ -252,14 +253,18 @@ To integrate **pull-request-analytics-action** into your GitHub repository, use 
          report_date_end:
            description: "Report date end(d/MM/yyyy)"
    jobs:
-     create-report:
-       name: "Create report"
-       runs-on: ubuntu-latest
-       steps:
-         - name: "Run script for analytics"
-           uses: AlexSim93/pull-request-analytics-action@v4
-           with:
-             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # In the case of a personal access token, it needs to be added to the repository's secrets and used in this field.
+    create-report:
+      name: "Create report"
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v3
+        - uses: actions/setup-node@v4
+          with:
+            node-version: "20"
+        - name: "Run script for analytics"
+          uses: AlexSim93/pull-request-analytics-action@v4
+          with:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # In the case of a personal access token, it needs to be added to the repository's secrets and used in this field.
              GITHUB_REPO_FOR_ISSUE: # Make sure to specify the name of the repository where the issue will be created
              GITHUB_OWNER_FOR_ISSUE: # Make sure to specify the owner of the repository where the issue will be created
              GITHUB_OWNERS_REPOS: # Be sure to list the owner and repository name in the format owner/repo
@@ -333,6 +338,7 @@ Below is a table outlining the various configuration parameters available for **
 | `SHOW_USERS`                | Displays only specified users in reports, but includes all users in the background analytics. Use `total` to show total stats. Users should be separated by commas.                                                                                                                                                                                                                                   | -                                                                       |
 | `EXCLUDE_LABELS`            | PRs with mentioned labels will be excluded from the report . Values should be separated by commas. Example: `bugfix, enhancement`                                                                                                                                                                                                                                                                     | -                                                                       |
 | `INCLUDE_LABELS`            | Only PRs with mentioned labels will be included in the report. Values should be separated by commas. Example: `bugfix, enhancement`                                                                                                                                                                                                                                                                   | -                                                                       |
+| `MARKDOWN_KEYWORDS`         | Keywords for markdown filenames to track when markdown files are added or updated. Values should be separated by commas. | `adr, design`
 | `EXECUTION_OUTCOME`         | This parameter allows you to specify the format in which you wish to receive the report. Options include creating a new issue, updating an existing one, obtaining markdown, or JSON. Markdown and JSON will be available in outputs. Can take mulitple values separated by commas: `new-issue`, `markdown`, `collection`, `existing-issue`. This parameter is **required** Example: `existing-issue` | `new-issue`                                                             |
 | `ISSUE_NUMBER`              | Issue number to update. Add `existing-issue` to `EXECUTION_OUTCOME` for updating existing issue. The specified issue must already exist at the time the action is executed. This parameter is mandatory if the `EXECUTION_OUTCOME` input includes `existing-issue` value                                                                                                                              | -                                                                       |
 | `ALLOW_ANALYTICS`           | Allows sending non-sensitive inputs to mixpanel for better understanding user's needs. Set the value to `false` to disable sending action parameter data                                                                                                                                                                                                                                              | `true`                                                                  |
@@ -356,6 +362,8 @@ Below is a table describing the possible outputs of **pull-request-analytics-act
 - To hide individual metrics, specify users in the `HIDE_USERS` parameter or leave `total` and GitHub team names in the `SHOW_USERS` parameter.
 - To avoid a long list of title changes when updating an existing issue, it is recommended to set the title yourself using the `ISSUE_TITLE` parameter.
 - You can filter pull requests using labels with the `EXCLUDE_LABELS` and `INCLUDE_LABELS` parameters.
+- An example workflow that demonstrates markdown tracking can be found [here](./configs/markdownTracking.yml).
+- A minimal workflow to test this action is available [here](./.github/workflows/test-action.yml).
 
 ## Troubleshooting
 
@@ -367,6 +375,19 @@ If you encounter a `Not Found` error:
 - If you're using `GITHUB_TOKEN`, remember that it only provides access to the repository where the action is running.
 
 You can read more about this in the [GitHub documentation](https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api?apiVersion=2022-11-28#404-not-found-for-an-existing-resource).
+
+## Local Testing
+
+You can validate your workflow configuration locally using [act](https://github.com/nektos/act). This tool lets you run GitHub Actions without pushing code.
+
+1. Install `act` by following the instructions in its repository.
+2. Execute the example workflow:
+
+   ```bash
+   act -j create-report -W ./configs/markdownTracking.yml
+   ```
+
+This command runs the `create-report` job from `configs/markdownTracking.yml` with default parameters. Adjust the inputs in the workflow file to test different setups.
 
 ## Privacy and Data Handling
 

@@ -33,6 +33,7 @@ export const sendActionError = (error: Error) => {
       SHOW_USERS: getMultipleValuesInput("SHOW_USERS").length,
       INCLUDE_LABELS: getMultipleValuesInput("INCLUDE_LABELS").length,
       EXCLUDE_LABELS: getMultipleValuesInput("EXCLUDE_LABELS").length,
+      MARKDOWN_KEYWORDS: getMultipleValuesInput("MARKDOWN_KEYWORDS"),
       EXECUTION_OUTCOME: getMultipleValuesInput("EXECUTION_OUTCOME"),
       WEEKENDS: getMultipleValuesInput("WEEKENDS"),
       HOLIDAYS: getMultipleValuesInput("HOLIDAYS").length,

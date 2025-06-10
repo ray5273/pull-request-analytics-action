@@ -33,6 +33,7 @@ export const sendActionRun = () => {
       SHOW_USERS: getMultipleValuesInput("SHOW_USERS").length,
       INCLUDE_LABELS: getMultipleValuesInput("INCLUDE_LABELS").length,
       EXCLUDE_LABELS: getMultipleValuesInput("EXCLUDE_LABELS").length,
+      MARKDOWN_KEYWORDS: getMultipleValuesInput("MARKDOWN_KEYWORDS"),
       EXECUTION_OUTCOME: getMultipleValuesInput("EXECUTION_OUTCOME"),
       WEEKENDS: getMultipleValuesInput("WEEKENDS"),
       HOLIDAYS: getMultipleValuesInput("HOLIDAYS").length,
@@ -46,6 +47,6 @@ export const sendActionRun = () => {
       SHOW_ACTIVITY_TIME_GRAPHS: getValueAsIs("SHOW_ACTIVITY_TIME_GRAPHS"),
     });
   } else {
-    mixpanel.track("Anomymous action run", { distinct_id: "anonymous" });
+    mixpanel.track("Anonymous action run", { distinct_id: "anonymous" });
   }
 };

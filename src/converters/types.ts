@@ -96,6 +96,9 @@ export type Collection = {
     }
   >;
   prSizes?: string[];
+  markdownAdded?: number;
+  markdownUpdated?: number;
+  markdownKeywords?: Record<string, { added?: number; updated?: number }>;
   sizes?: Record<
     string,
     {
