@@ -45,7 +45,7 @@ async function main() {
     ).map((el) => el.split("/"));
 
     console.log("Initiating data request.");
-    const data = [];
+    const data: Awaited<ReturnType<typeof makeComplexRequest>>[] = [];
     const orgs = getOrgs();
 
     const teams = await getTeams(orgs);
@@ -76,12 +76,14 @@ async function main() {
         events: [...acc.events, ...element!.events],
         pullRequestInfo: [...acc?.pullRequestInfo, ...element!.pullRequestInfo],
         comments: [...acc?.comments, ...element!.comments],
+        files: [...(acc?.files || []), ...(element!.files || [])],
       }),
       {
         ownerRepo: "",
         events: [],
         pullRequestInfo: [],
         comments: [],
+        files: [],
       }
     );
     const preparedData = collectData(mergedData, teams);

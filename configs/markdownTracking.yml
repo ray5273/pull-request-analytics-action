@@ -1,0 +1,18 @@
+name: "Markdown Tracking"
+on:
+  workflow_dispatch:
+jobs:
+  create-report:
+    name: "Create report"
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Run script for analytics"
+        uses: AlexSim93/pull-request-analytics-action@v4
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_OWNER_FOR_ISSUE: "owner"
+          GITHUB_REPO_FOR_ISSUE: "repo"
+          GITHUB_OWNERS_REPOS: "owner/repo"
+          MARKDOWN_KEYWORDS: "adr, design"
+          EXECUTION_OUTCOME: new-issue
+
