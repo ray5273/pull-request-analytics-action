@@ -12,6 +12,7 @@ This GitHub Action measures metrics for developers and/or teams. Reports are gen
 - [Outputs](#outputs)
 - [Recommendations and Tips](#recommendations-and-tips)
 - [Troubleshooting](#troubleshooting)
+- [Local Testing](#local-testing)
 - [Privacy and Data Handling](#privacy-and-data-handling)
 - [Usage Limitations](#usage-limitations)
 - [How You Can Help](#how-you-can-help)
@@ -369,6 +370,19 @@ If you encounter a `Not Found` error:
 - If you're using `GITHUB_TOKEN`, remember that it only provides access to the repository where the action is running.
 
 You can read more about this in the [GitHub documentation](https://docs.github.com/en/rest/using-the-rest-api/troubleshooting-the-rest-api?apiVersion=2022-11-28#404-not-found-for-an-existing-resource).
+
+## Local Testing
+
+You can validate your workflow configuration locally using [act](https://github.com/nektos/act). This tool lets you run GitHub Actions without pushing code.
+
+1. Install `act` by following the instructions in its repository.
+2. Execute the example workflow:
+
+   ```bash
+   act -j create-report -W ./configs/markdownTracking.yml
+   ```
+
+This command runs the `create-report` job from `configs/markdownTracking.yml` with default parameters. Adjust the inputs in the workflow file to test different setups.
 
 ## Privacy and Data Handling
 
