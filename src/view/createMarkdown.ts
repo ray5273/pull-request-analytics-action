@@ -7,6 +7,7 @@ import {
   createReviewTable,
   createTimelineContent,
   createTotalTable,
+  createMarkdownStatsTable,
 } from "./utils";
 import { getMultipleValuesInput } from "../common/utils";
 
@@ -20,14 +21,13 @@ export const createMarkdown = (
   const contentTypes = getMultipleValuesInput("SHOW_STATS_TYPES");
 
   const content = dates.map((date) => {
-    if (!data.total[date]?.merged) return "";
-
-    const contentMap: Record<string, string> = {
+    if (!data.total[date]?.merged) return "";    const contentMap: Record<string, string> = {
       timeline: createTimelineContent(data, users, date),
       workload: createTotalTable(data, users, date),
       "code-review-engagement": createReviewTable(data, users, date),
       "pr-quality": createPullRequestQualityTable(data, users, date),
       "response-time": createResponseTable(data, users, date),
+      "markdown-changes": createMarkdownStatsTable(data, users, date),
     };
 
     return `

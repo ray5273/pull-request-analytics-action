@@ -6,3 +6,5 @@ export { prepareReviews } from "./prepareReviews";
 export { prepareResponseTime } from "./prepareResponseTime";
 export { prepareRequestedReviews } from "./prepareRequestedReviews";
 export { prepareActionsTime } from "./prepareActionsTime";
+export { analyzeMarkdownFiles, checkMarkdownKeywords } from "./analyzeMarkdownFiles";
+export { prepareMarkdownStats } from "./prepareMarkdownStats";

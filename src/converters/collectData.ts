@@ -13,6 +13,8 @@ import {
   prepareResponseTime,
   prepareRequestedReviews,
   prepareActionsTime,
+  analyzeMarkdownFiles,
+  prepareMarkdownStats,
 } from "./utils";
 import {
   invalidUserLogin,
@@ -46,7 +48,8 @@ export const collectData = (
       [readyForReviewTimelineEvent, convertToDraftTimelineEvent].includes(
         el.event as string
       )
-    );
+    );    // 마크다운 파일 추적 정보 수집
+    const prFiles = data.files[index] || [];
 
     prepareActionsTime(
       pullRequest,
@@ -85,6 +88,16 @@ export const collectData = (
             reviews,
             reviewRequests?.[0],
             statuses,
+            get(collection, [key, innerKey], {})
+          )
+        );
+
+        // 마크다운 통계 추가
+        set(
+          collection,
+          [key, innerKey],
+          prepareMarkdownStats(
+            prFiles,
             get(collection, [key, innerKey], {})
           )
         );

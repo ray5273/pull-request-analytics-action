@@ -117,11 +117,14 @@ inputs:
   SHOW_CORRELATION_GRAPHS:
     description: "Shows correlation graphs"
     required: false
-    default: false
-  SHOW_ACTIVITY_TIME_GRAPHS:
+    default: false  SHOW_ACTIVITY_TIME_GRAPHS:
     description: "Shows activity time graphs"
     required: false
     default: false
+  MARKDOWN_KEYWORDS:
+    description: "Keywords to search for in markdown filenames when tracking markdown file changes. Values should be separated by comma"
+    required: false
+    default: "readme, doc, guide, tutorial, changelog, migration, api"
 
 outputs:
   JSON_COLLECTION:

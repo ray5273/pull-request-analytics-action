@@ -14,4 +14,5 @@ export { getDisplayUserList } from "./common";
 export { createTimelineContent } from "./createTimelineContent";
 export { createReferences } from "./createReferences";
 export { createResponseTable } from "./createResponseTable";
+export { createMarkdownStatsTable } from "./createMarkdownStatsTable";
 export { StatsType } from "./types";
