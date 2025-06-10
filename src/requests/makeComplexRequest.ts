@@ -8,6 +8,7 @@ export const makeComplexRequest = async (
   repository: Repository,
   options: Options = {
     skipComments: true,
+    skipFiles: false,
   }
 ) => {
   const pullRequests = await getPullRequests(amount, repository);
@@ -27,8 +28,7 @@ export const makeComplexRequest = async (
       return isIncludeLabelsCorrect && isExcludeLabelsCorrect;
     })
     .map((item) => item.number);
-
-  const { PRs, PREvents, PRComments } = await getDataWithThrottle(
+  const { PRs, PREvents, PRComments, PRFiles } = await getDataWithThrottle(
     pullRequestNumbers,
     repository,
     options
@@ -46,10 +46,15 @@ export const makeComplexRequest = async (
     element.status === "fulfilled" ? element.value.data : null
   );
 
+  const files = PRFiles.map((element) =>
+    element.status === "fulfilled" ? element.value.data : null
+  );
+
   return {
     ownerRepo: `${repository.owner}/${repository.repo}`,
     events,
     pullRequestInfo,
     comments,
+    files,
   };
 };

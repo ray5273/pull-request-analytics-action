@@ -14,6 +14,7 @@ import {
   getOrgs,
   getValueAsIs,
   setTimezone,
+  getMultipleValuesInput,
 } from "./common/utils";
 import { getRateLimit } from "./requests/getRateLimit";
 import { sendActionError, sendActionRun } from "./analytics";
@@ -48,9 +49,8 @@ async function main() {
     const data = [];
     const orgs = getOrgs();
 
-    const teams = await getTeams(orgs);
-
-    for (let i = 0; i < repos.length; i++) {
+    const teams = await getTeams(orgs);    for (let i = 0; i < repos.length; i++) {
+      const skipMarkdownTracking = !getMultipleValuesInput("SHOW_STATS_TYPES").includes("markdown-changes");
       const result = await makeComplexRequest(
         parseInt(getValueAsIs("AMOUNT")),
         {
@@ -59,14 +59,13 @@ async function main() {
         },
         {
           skipComments: checkCommentSkip(),
+          skipFiles: skipMarkdownTracking,
         }
       );
       data.push(result);
     }
 
-    console.log("Data successfully retrieved. Starting report calculations.");
-
-    const mergedData = data.reduce<
+    console.log("Data successfully retrieved. Starting report calculations.");    const mergedData = data.reduce<
       Awaited<ReturnType<typeof makeComplexRequest>>
     >(
       (acc, element) => ({
@@ -76,12 +75,14 @@ async function main() {
         events: [...acc.events, ...element!.events],
         pullRequestInfo: [...acc?.pullRequestInfo, ...element!.pullRequestInfo],
         comments: [...acc?.comments, ...element!.comments],
+        files: [...acc?.files, ...element!.files],
       }),
       {
         ownerRepo: "",
         events: [],
         pullRequestInfo: [],
         comments: [],
+        files: [],
       }
     );
     const preparedData = collectData(mergedData, teams);

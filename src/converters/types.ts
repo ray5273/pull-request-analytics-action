@@ -49,6 +49,17 @@ type Discussion = {
   conducted?: DiscussionResult;
 };
 
+type MarkdownStats = {
+  added: number;
+  modified: number;
+  deleted: number;
+  totalFiles: number;
+  filesWithKeywords: { filename: string; keywords: string[] }[];
+  addedFiles: string[];
+  modifiedFiles: string[];
+  deletedFiles: string[];
+};
+
 export type Collection = {
   opened?: number;
   closed?: number;
@@ -116,9 +127,9 @@ export type Collection = {
         timeToApprove?: number;
         timeToReview?: number;
         timeToMerge?: number;
-      };
-    }
+      };    }
   >;
   reviewsConductedSize?: PullRequestSize[];
   pullRequestsInfo?: PullRequestTimelineInfo[];
+  markdownStats?: MarkdownStats;
 };

@@ -4,6 +4,7 @@ import { delay } from "./delay";
 import { getIssueTimelineEvents } from "./getIssueTimelineEvents";
 import { getPullRequestComments } from "./getPullRequestComments";
 import { getPullRequestDatas } from "./getPullRequestData";
+import { getPullRequestFiles } from "./getPullRequestFiles";
 import { Options, Repository } from "./types";
 
 export const getDataWithThrottle = async (
@@ -14,8 +15,8 @@ export const getDataWithThrottle = async (
   const PRs = [];
   const PREvents = [];
   const PRComments = [];
-  let counter = 0;
-  const { skipComments = true } = options;
+  const PRFiles = [];
+  let counter = 0;  const { skipComments = true, skipFiles = false } = options;
   while (pullRequestNumbers.length > PRs.length) {
     const startIndex = counter * concurrentLimit;
     const endIndex = (counter + 1) * concurrentLimit;
@@ -47,15 +48,24 @@ export const getDataWithThrottle = async (
       repository,
       {
         skip: skipComments,
-      }
-    );
-
-    const comments = await Promise.allSettled(pullRequestComments);
+      }    );    const comments = await Promise.allSettled(pullRequestComments);
     await delay(checkCommentSkip() ? 0 : 5000);
+
+    let files: any[] = [];
+    if (!skipFiles) {
+      const pullRequestFilesData = await getPullRequestFiles(
+        pullRequestNumbersChunks,
+        repository
+      );
+      files = await Promise.allSettled(pullRequestFilesData);
+      await delay(5000);
+    }
+
     counter++;
     PRs.push(...prs);
     PRComments.push(...comments);
     PREvents.push(...events);
+    PRFiles.push(...files);
   }
-  return { PRs, PREvents, PRComments };
+  return { PRs, PREvents, PRComments, PRFiles };
 };
