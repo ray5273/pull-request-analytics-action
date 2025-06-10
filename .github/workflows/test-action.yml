@@ -5,8 +5,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
-
+          GITHUB_OWNER_FOR_ISSUE: "ray5273"
+          GITHUB_REPO_FOR_ISSUE: "pull-request-analytics-action"
+          GITHUB_OWNERS_REPOS: "ray5273/pull-request-analytics-action"
+          MARKDOWN_KEYWORDS: "README"
+          EXECUTION_OUTCOME: new-issue
