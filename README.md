@@ -359,6 +359,7 @@ Below is a table describing the possible outputs of **pull-request-analytics-act
 - To avoid a long list of title changes when updating an existing issue, it is recommended to set the title yourself using the `ISSUE_TITLE` parameter.
 - You can filter pull requests using labels with the `EXCLUDE_LABELS` and `INCLUDE_LABELS` parameters.
 - An example workflow that demonstrates markdown tracking can be found [here](./configs/markdownTracking.yml).
+- A minimal workflow to test this action is available [here](./.github/workflows/test-action.yml).
 
 ## Troubleshooting
 
